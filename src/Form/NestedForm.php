@@ -6,6 +6,7 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Form\Field\MultipleSelectTable;
 use Dcat\Admin\Form\Field\SelectTable;
+use Dcat\Admin\Support\Helper;
 use Dcat\Admin\Widgets\Form as WidgetForm;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -269,7 +270,7 @@ class NestedForm
                 $value = $field->prepare($value);
             }
 
-            if (($field instanceof Form\Field\Hidden) || $value != $field->original()) {
+            if (($field instanceof Form\Field\Hidden) || ! Helper::equal($field->original(), $value)) {
                 if (is_array($columns)) {
                     foreach ($columns as $name => $column) {
                         Arr::set($prepared, $column, $value[$name]);
