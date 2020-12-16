@@ -348,7 +348,7 @@ class Helper
      */
     public static function slug(string $name, string $symbol = '-')
     {
-        $text = preg_replace_callback('/([A-Z])/', function (&$text) use ($symbol) {
+        $text = preg_replace_callback('/([A-Z])/', function ($text) use ($symbol) {
             return $symbol.strtolower($text[1]);
         }, $name);
 
@@ -776,8 +776,8 @@ class Helper
         $method = $query === 'orWhere' ? 'orWhere' : 'where';
         $subQuery = $query === 'orWhere' ? 'where' : $query;
 
-        $model->$method(function () use ($model, $column, $subQuery, $params) {
-            static::withRelationQuery($model, $column, $subQuery, $params);
+        $model->$method(function ($q) use ($column, $subQuery, $params) {
+            static::withRelationQuery($q, $column, $subQuery, $params);
         });
     }
 
@@ -815,7 +815,7 @@ class Helper
     public static function htmlEntityEncode($item)
     {
         if (is_array($item)) {
-            array_walk_recursive($item, function (&$value) {
+            array_walk_recursive($item, function ($value) {
                 $value = htmlentities($value);
             });
         } else {
